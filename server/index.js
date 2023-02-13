@@ -8,7 +8,7 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
-import authController from "./controllers/auth";
+import { register } from "./controllers/auth.js";
 
 const __fileName = fileURLToPath(import.meta.url);
 const __dirName = path.dirname(__fileName);
@@ -43,4 +43,4 @@ mongoose
   .catch((e) => console.log(e));
 mongoose.set("strictQuery", false);
 
-app.post("/auth/login", upload.single("picture"), authController);
+app.post("/auth/login", upload.single("picture"), register);
