@@ -8,8 +8,9 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
-import { register } from "./controllers/auth.js";
-
+import { login, register } from "./controllers/auth.js";
+import authRoutes from "./routes/auth.js";
+import userRouter from "./routes/users.js";
 const __fileName = fileURLToPath(import.meta.url);
 const __dirName = path.dirname(__fileName);
 dotenv.config();
@@ -43,4 +44,7 @@ mongoose
   .catch((e) => console.log(e));
 mongoose.set("strictQuery", false);
 
-app.post("/auth/login", upload.single("picture"), register);
+app.post("/auth/register", upload.single("picture"), register);
+
+app.use("/auth", authRoutes);
+app.use("/users", userRouter);
