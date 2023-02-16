@@ -8,9 +8,15 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
-import { login, register } from "./controllers/auth.js";
+import { register } from "./controllers/auth.js";
 import authRoutes from "./routes/auth.js";
 import userRouter from "./routes/users.js";
+import postRouter from "./routes/post.js";
+import { isLogged } from "./middleware/auth.js";
+import { createPost } from "./controllers/post.js";
+import { User } from "./models/User.js";
+import { Post } from "./models/Post.js";
+import { posts, users } from "./data.js";
 const __fileName = fileURLToPath(import.meta.url);
 const __dirName = path.dirname(__fileName);
 dotenv.config();
@@ -40,11 +46,19 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => app.listen(PORT, () => console.log(`Server port is ${PORT}`)))
+  .then(() =>
+    app.listen(PORT, () => {
+      console.log(`Server port is ${PORT}`);
+      // User.insertMany(users);
+      // Post.insertMany(posts);
+    })
+  )
   .catch((e) => console.log(e));
 mongoose.set("strictQuery", false);
 
 app.post("/auth/register", upload.single("picture"), register);
+app.post("/posts/create-post", isLogged, upload.single("picture"), createPost);
 
 app.use("/auth", authRoutes);
 app.use("/users", userRouter);
+app.use("/posts", postRouter);
