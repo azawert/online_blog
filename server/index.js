@@ -14,9 +14,6 @@ import userRouter from "./routes/users.js";
 import postRouter from "./routes/post.js";
 import { isLogged } from "./middleware/auth.js";
 import { createPost } from "./controllers/post.js";
-import { User } from "./models/User.js";
-import { Post } from "./models/Post.js";
-import { posts, users } from "./data.js";
 const __fileName = fileURLToPath(import.meta.url);
 const __dirName = path.dirname(__fileName);
 dotenv.config();
@@ -28,11 +25,11 @@ app.use(morgan("common"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
-app.use("/assets", Express.static(path.join(__dirName, "publ/assets")));
+app.use("/assets", Express.static(path.join(__dirName, "public/assets")));
 
 const store = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "publ/assets");
+    cb(null, "public/assets");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
